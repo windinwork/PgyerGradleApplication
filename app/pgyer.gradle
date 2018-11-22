@@ -1,0 +1,34 @@
+task pgyer(type: Exec) {
+
+    String apiKey = "6767f341ee7ed1f9fd4699e6ed71e773"
+    String userKey = "0cf7164e5158effc01cc24c0667266c4"
+    String desc = getGitLog()
+
+    commandLine 'curl'
+    args '-k', 'http://www.pgyer.com/apiv1/app/upload',
+            '-F', "uKey=${userKey}",
+            '-F', "_api_key=${apiKey}",
+            '-F', "file=@${getApkPath()}",
+            '-F', "updateDescription=${desc}"
+}
+
+def getGitLog() {
+    return 'git log --pretty=format:"%s__in__%ad__by__%an" -10 --date=format:%c'.execute().text
+}
+
+def getApkPath() {
+    String buildType = getBuildType().toLowerCase()
+    return new File(buildDir, "outputs/apk/${buildType}/app-${buildType}.apk").absolutePath
+}
+
+def getBuildType() {
+    Gradle gradle = getGradle()
+    String args = gradle.getStartParameter().getTaskRequests().toString()
+    println(args)
+    if (args.contains("assembleRelease")) {
+        return "Release"
+    } else if (args.contains("assembleDebug")) {
+        return "Debug"
+    }
+    return "Debug"
+}
