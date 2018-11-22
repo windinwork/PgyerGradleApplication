@@ -4,6 +4,13 @@ task pgyer(type: Exec) {
     String userKey = "0cf7164e5158effc01cc24c0667266c4" // todo 这里替换为自己的蒲公英的userKey
     String desc = getGitLog()
 
+    if (project.hasProperty("pgyerDesc")) {
+        desc = pgyerDesc + "\n" + desc
+    }
+    if (desc == null || desc.isEmpty()) {
+        desc = "保持沉默"
+    }
+
     commandLine 'curl'
     args '-k', 'http://www.pgyer.com/apiv1/app/upload',
             '-F', "uKey=${userKey}",
@@ -13,7 +20,7 @@ task pgyer(type: Exec) {
 }
 
 def getGitLog() {
-    return 'git log --pretty=format:"%s__in__%ad__by__%an" -10 --date=format:%c'.execute().text
+    return 'git log --pretty=format:"%s___in___%ad___by___%an" -10 --date=format:%c'.execute().text
 }
 
 def getApkPath() {
