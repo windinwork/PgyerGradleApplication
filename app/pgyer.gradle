@@ -1,6 +1,6 @@
 task pgyer(type: Exec) {
 
-    String apiKey = "6767f341ee7ed1f9fd4699e6ed71e773"
+    String apiKey = "6767f341ee7ed1f9fd4699e6ed71e773" // todo 这里替换为自己的蒲公英的apiKey
     String userKey = "0cf7164e5158effc01cc24c0667266c4"
     String desc = getGitLog()
 
